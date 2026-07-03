@@ -5,7 +5,8 @@
 	"scripts": {
 		"start": "tsx src/index.ts",
 		"dev": "nodemon --watch 'src/**/*.ts' --exec 'tsx' src/index.ts",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"migrate": "node migration.js"
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^6.0.0",
@@ -33,6 +34,7 @@
 		"fastest-validator": "^1.19.1",
 		"jsonwebtoken": "^9.0.2",
 		"morgan": "^1.10.1",
+		"mysql2": "^3.22.5",
 		"nodemon": "^3.1.10",
 		"passport": "^0.7.0",
 		"passport-jwt": "^4.0.1",

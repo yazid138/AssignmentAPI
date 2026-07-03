@@ -7,8 +7,7 @@ import UnauthorizedException from "@/exception/UnauthorizedException";
 import config from "@/config";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import prisma from "@/database/prisma";
-import { User } from "@prisma/client";
+import connection from "@/database/connection";
 import RegisterBody from "@/types/auth/registerBody";
 import LoginBody from "@/types/auth/loginBody";
 
@@ -22,7 +21,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
   );
   passport.authenticate(
     "local",
-    (err: boolean, user?: User, info?: { message: string }) => {
+    (err: boolean, user?: any, info?: { message: string }) => {
       try {
         if (!user) {
           throw new UnauthorizedException(info?.message);
@@ -64,15 +63,17 @@ export const register = async (req: Request, res: Response) => {
     req.body,
   );
   const { name, username, password } = req.body as RegisterBody;
-  const existingUser = await prisma.user.findUnique({ where: { username } });
+  const [rows]: any = await connection.query("SELECT * FROM users WHERE username = ?", [username]);
+  const existingUser = rows[0];
   if (existingUser) {
     throw new BadRequestException("Username already exists");
-  }
+  } 
   const hashedPassword = await bcrypt.hash(password, 10);
-  await prisma.user.create({
-    data: { name, username, password: hashedPassword },
-  });
-  sendResponse(res, { status: 200, message: "Register successful" });
+  const [result]: any = await connection.query(
+    "INSERT INTO users (name, username, password) VALUES (?, ?, ?)",
+    [name, username, hashedPassword],
+  );
+  sendResponse(res, { status: 201, message: "User registered successfully" });
 };
 
 export const logout = (req: Request, res: Response) => {

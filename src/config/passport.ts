@@ -2,10 +2,9 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import config from "@/config";
-import prisma from "@/database/prisma";
 import bcrypt from "bcrypt";
-import { User } from "@prisma/client";
 import UserResponse from "@/types/userResponse";
+import connection from "@/database/connection";
 
 passport.use(
   new LocalStrategy(
@@ -13,10 +12,11 @@ passport.use(
     async (
       username: string,
       password: string,
-      done: (error: boolean, user?: User, info?: { message: string }) => void,
+      done: (error: boolean, user?: any, info?: { message: string }) => void,
     ) => {
       try {
-        const user = await prisma.user.findUnique({ where: { username } });
+        const [rows]: any = await connection.query("SELECT * FROM users WHERE username = ?", [username]);
+        const user = rows[0];
         if (!user) {
           return done(true, undefined, { message: "Username tidak ditemukan" });
         }
@@ -46,10 +46,8 @@ passport.use(
       done: (err: boolean, user?: UserResponse) => void,
     ) => {
       try {
-        const user = await prisma.user.findUnique({
-          where: { id: payload.id },
-          select: { id: true, name: true, username: true, createdAt: true },
-        });
+        const [rows]: any = await connection.query("SELECT * FROM users WHERE id = ?", [payload.id]);
+        const user = rows[0];
         if (!user) {
           return done(true);
         }
