@@ -69,7 +69,7 @@ export const register = async (req: Request, res: Response) => {
     throw new BadRequestException("Username already exists");
   } 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const [result]: any = await connection.query(
+  await connection.query(
     "INSERT INTO users (name, username, password) VALUES (?, ?, ?)",
     [name, username, hashedPassword],
   );
