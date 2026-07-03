@@ -1,12 +1,11 @@
 {
 	"name": "wawancara",
 	"module": "src/index.ts",
-	"type": "commonjs",
+	"type": "module",
 	"scripts": {
 		"start": "tsx src/index.ts",
 		"dev": "nodemon --watch 'src/**/*.ts' --exec 'tsx' src/index.ts",
-		"format": "prettier --write .",
-		"migrate": "node-pg-migrate"
+		"format": "prettier --write ."
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^6.0.0",
@@ -19,7 +18,6 @@
 		"@types/passport-local": "^1.0.38",
 		"dotenv": "^17.2.3",
 		"install": "^0.13.0",
-		"node-pg-migrate": "^8.0.4",
 		"npm": "^11.6.2",
 		"prettier": "^3.6.2"
 	},
@@ -38,7 +36,6 @@
 		"nodemon": "^3.1.10",
 		"passport": "^0.7.0",
 		"passport-jwt": "^4.0.1",
-		"passport-local": "^1.0.0",
-		"pg": "^8.22.0"
+		"passport-local": "^1.0.0"
 	}
 }
