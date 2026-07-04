@@ -71,13 +71,19 @@ export const createTransaction = async (req: Request, res: Response, next: NextF
 
 export const transactionList = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const offset = Number(req.query.offset) || 0;
+    const limit = Number(req.query.limit) || 10;
     const user = req.user as User;
-    const result = await transactionService.getTransactionList(user);
+    const result = await transactionService.getTransactionList(user, offset, limit);
     sendResponse(res, {
       status: 0,
       statusCode: 200,
-      message: "Success",
-      data: result,
+      message: "Get History Berhasil",
+      data: {
+        offset,
+        limit,
+        records: result,
+      },
     });
   } catch (err) {
     next(err);

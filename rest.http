@@ -2,7 +2,7 @@
 @password = password123
 
 ### Register
-POST https://assignment-api-674503166c57.herokuapp.com/registration
+POST http://localhost:5000/registration
 Content-Type: application/json
 
 {

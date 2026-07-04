@@ -32,10 +32,10 @@ export const createTransaction = async (user: User, data: { type: "PAYMENT" | "T
 }
 
 
-export const getTransactionList = async (user: User) => {
+export const getTransactionList = async (user: User, offset: number, limit: number) => {
     const [rows] = await connection.query<RowDataPacket[]>(`
-        SELECT invoice_number, transaction_type, description, total_amount, created_at FROM transaction WHERE user_id = ? ORDER BY created_at DESC
-    `, [user.id]);
+        SELECT invoice_number, transaction_type, description, total_amount, created_at FROM transaction WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?
+    `, [user.id, limit, offset]);
     return rows.map(e => ({
         invoice_number: e.invoice_number,
         transaction_type: e.transaction_type,
