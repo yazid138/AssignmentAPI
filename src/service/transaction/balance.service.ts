@@ -9,7 +9,7 @@ export interface BalanceResult extends RowDataPacket {
 
 export const getBalance = async (user: User, conn?: PoolConnection): Promise<BalanceResult> => {
   const db = conn || connection;
-  const [rows] = await db.query<BalanceResult[]>(
+  const [rows] = await db.execute<BalanceResult[]>(
     "SELECT balance FROM balance WHERE user_id = ?",
     [user.id]
   );
@@ -18,7 +18,7 @@ export const getBalance = async (user: User, conn?: PoolConnection): Promise<Bal
 
 export const createBalance = async (user: User, conn?: PoolConnection) => {
   const db = conn || connection;
-  const [rows] = await db.query<BalanceResult[]>(
+  const [rows] = await db.execute<BalanceResult[]>(
     "INSERT INTO balance (user_id, balance) VALUES (?, 0)",
     [user.id]
   );
@@ -27,7 +27,7 @@ export const createBalance = async (user: User, conn?: PoolConnection) => {
 
 export const updateBalance = async (user: User, topUpAmount: number, conn?: PoolConnection) => {
   const db = conn || connection;
-  await db.query(
+  await db.execute(
     "UPDATE balance SET balance = balance + ? WHERE user_id = ?",
     [topUpAmount, user.id]
   );
@@ -41,17 +41,17 @@ export const executeTopUp = async (user: User, topUpAmount: number): Promise<Bal
   try {
     await conn.beginTransaction();
 
-    await conn.query(
+    await conn.execute(
       "UPDATE balance SET balance = balance + ? WHERE user_id = ?",
       [topUpAmount, user.id]
     );
 
     const invNumber = `INV-${Date.now()}-${count}`;
-    await conn.query(`
+    await conn.execute(`
       INSERT INTO transaction (user_id, invoice_number, total_amount, transaction_type, description, service_code) VALUES (?, ?, ?, ?, ?, ?)
     `, [user.id, invNumber, topUpAmount, "TOPUP", "Top Up balance", null]);
 
-    const [rows] = await conn.query<BalanceResult[]>(
+    const [rows] = await conn.execute<BalanceResult[]>(
       "SELECT balance FROM balance WHERE user_id = ?",
       [user.id]
     );

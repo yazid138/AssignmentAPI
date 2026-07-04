@@ -10,7 +10,7 @@ export interface ServicesResult extends RowDataPacket {
 }
 
 export const getServices = async () => {
-  const [rows] = await connection.query<ServicesResult[]>(
+  const [rows] = await connection.execute<ServicesResult[]>(
     "SELECT service_code, service_name, service_icon, service_tariff, description FROM services"
   );
   return rows.map((e) => ({
@@ -22,7 +22,7 @@ export const getServices = async () => {
 };
 
 export const getServiceByCode = async (serviceCode: string) => {
-  const [rows] = await connection.query<ServicesResult[]>(
+  const [rows] = await connection.execute<ServicesResult[]>(
     "SELECT service_code, service_name, service_icon, service_tariff, description FROM services WHERE service_code = ?",
     [serviceCode]
   );

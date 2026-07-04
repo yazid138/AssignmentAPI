@@ -29,9 +29,9 @@ export const updateProfile = async (
   userId: number,
   data: { first_name?: string; last_name?: string }
 ): Promise<void> => {
-  await connection.query(
+  await connection.execute(
     "UPDATE users SET first_name = ?, last_name = ? WHERE id = ?",
-    [data.first_name, data.last_name, userId]
+    [data.first_name || null, data.last_name || null, userId]
   );
 };
 
@@ -70,7 +70,7 @@ export const updateImage = async (
   const profileImageUrl = PROFILE_IMAGE_URL + fileName;
 
   // Update database
-  await connection.query(
+  await connection.execute(
     "UPDATE users SET profile_image = ? WHERE id = ?",
     [profileImageUrl, user.id]
   );

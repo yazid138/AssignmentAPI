@@ -8,7 +8,7 @@ export interface BannerResult extends RowDataPacket {
 }
 
 export const getBanners = async (): Promise<BannerResult[]> => {
-  const [rows] = await connection.query<BannerResult[]>(
+  const [rows] = await connection.execute<BannerResult[]>(
     "SELECT banner_name, banner_image, description FROM banners"
   );
   return rows;

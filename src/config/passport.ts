@@ -16,7 +16,7 @@ passport.use(
       done: (error: boolean, user?: User, info?: { message: string }) => void,
     ) => {
       try {
-        const [rows] = await connection.query<User[]>("SELECT * FROM users WHERE email = ?", [email]);
+        const [rows] = await connection.execute<User[]>("SELECT * FROM users WHERE email = ?", [email]);
         const user = rows[0];
         if (!user) {
           return done(true, undefined, { message: "Email tidak ditemukan" });
@@ -47,7 +47,7 @@ passport.use(
       done: (err: boolean, user?: User) => void,
     ) => {
       try {
-        const [rows] = await connection.query<User[]>("SELECT * FROM users WHERE id = ?", [payload.id]);
+        const [rows] = await connection.execute<User[]>("SELECT * FROM users WHERE id = ?", [payload.id]);
         const user = rows[0];
         if (!user) {
           return done(true);

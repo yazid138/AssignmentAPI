@@ -156,12 +156,12 @@ describe("API E2E Tests", () => {
     const body = await response.json();
     expect(response.status).toBe(200);
     expect(body.status).toBe(0);
-    expect(body.message).toBe("Success");
-    expect(body.data.length).toBeGreaterThanOrEqual(2);
+    expect(body.message).toBe("Get History Berhasil");
+    expect(body.data.records.length).toBeGreaterThanOrEqual(2);
 
     // Verify history details
-    const paymentTx = body.data.find((tx: any) => tx.transaction_type === "PAYMENT");
-    const topupTx = body.data.find((tx: any) => tx.transaction_type === "TOPUP");
+    const paymentTx = body.data.records.find((tx: any) => tx.transaction_type === "PAYMENT");
+    const topupTx = body.data.records.find((tx: any) => tx.transaction_type === "TOPUP");
 
     expect(paymentTx).toBeDefined();
     expect(paymentTx.total_amount).toBe(10000);

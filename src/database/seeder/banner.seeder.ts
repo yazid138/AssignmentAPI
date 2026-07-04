@@ -1,9 +1,9 @@
 import { Pool } from "mysql2/promise";
 
 export const seedBanners = async (connection: Pool) => {
-  await connection.query("SET FOREIGN_KEY_CHECKS = 0");
-  await connection.query("TRUNCATE TABLE banners");
-  await connection.query("SET FOREIGN_KEY_CHECKS = 1");
+  await connection.execute("SET FOREIGN_KEY_CHECKS = 0");
+  await connection.execute("TRUNCATE TABLE banners");
+  await connection.execute("SET FOREIGN_KEY_CHECKS = 1");
 
     const banners = [
       {
@@ -39,7 +39,7 @@ export const seedBanners = async (connection: Pool) => {
     ];
 
     for (const banner of banners) {
-      await connection.query(
+      await connection.execute(
         "INSERT INTO banners (banner_name, banner_image, description) VALUES (?, ?, ?)",
         [banner.banner_name, banner.banner_image, banner.description]
       );

@@ -11,7 +11,7 @@ import UnauthorizedException from "@/exception/UnauthorizedException";
 import balanceService from "@/service/transaction/balance.service";
 
 export const login = async (data: LoginBody): Promise<{ token: string }> => {
-  const [rows] = await connection.query<User[]>(
+  const [rows] = await connection.execute<User[]>(
     "SELECT * FROM users WHERE email = ?",
     [data.email]
   );
@@ -39,7 +39,7 @@ export const register = async (
   const db = conn || connection;
   const { first_name: firstName, last_name: lastName, email, password } = data;
 
-  const [rows] = await db.query<User[]>(
+  const [rows] = await db.execute<User[]>(
     "SELECT * FROM users WHERE email = ?",
     [email]
   );
@@ -49,12 +49,12 @@ export const register = async (
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const [result] = await db.query<any>(
+  const [result] = await db.execute<any>(
     "INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)",
     [firstName, lastName, email, hashedPassword]
   );
 
-  const [insertedRows] = await db.query<User[]>(
+  const [insertedRows] = await db.execute<User[]>(
     "SELECT * FROM users WHERE id = ?",
     [result.insertId]
   );
