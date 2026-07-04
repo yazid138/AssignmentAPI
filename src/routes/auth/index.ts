@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { login, logout, me, register } from "@/controller/auth.controller";
+import { login, logout, me, register } from "@/controller/membership/auth.controller";
 import auth from "@/middleware/auth";
 
 // auth/* routes

@@ -1,42 +1,49 @@
 {
-	"name": "wawancara",
-	"module": "src/index.ts",
-	"type": "module",
-	"scripts": {
-		"start": "tsx src/index.ts",
-		"dev": "nodemon --watch 'src/**/*.ts' --exec 'tsx' src/index.ts",
-		"format": "prettier --write ."
-	},
-	"devDependencies": {
-		"@types/bcrypt": "^6.0.0",
-		"@types/bun": "latest",
-		"@types/express": "^5.0.4",
-		"@types/morgan": "^1.9.10",
-		"@types/node": "^24.9.1",
-		"@types/passport": "^1.0.17",
-		"@types/passport-jwt": "^4.0.1",
-		"@types/passport-local": "^1.0.38",
-		"dotenv": "^17.2.3",
-		"install": "^0.13.0",
-		"npm": "^11.6.2",
-		"prettier": "^3.6.2"
-	},
-	"peerDependencies": {
-		"typescript": "^5.9.3"
-	},
-	"dependencies": {
-		"@prisma/client": "^6.18.0",
-		"bcrypt": "^6.0.0",
-		"cors": "^2.8.5",
-		"express": "^5.1.0",
-		"express-session": "^1.18.2",
-		"fastest-validator": "^1.19.1",
-		"jsonwebtoken": "^9.0.2",
-		"morgan": "^1.10.1",
-		"mysql2": "^3.22.5",
-		"nodemon": "^3.1.10",
-		"passport": "^0.7.0",
-		"passport-jwt": "^4.0.1",
-		"passport-local": "^1.0.0"
-	}
+  "name": "wawancara",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'tsx' src/index.ts",
+    "format": "prettier --write .",
+    "migrate": "node src/database/migration.js",
+    "db:seed": "tsx src/database/seed.ts",
+    "test:e2e": "bun test tests/e2e.test.ts"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/bun": "latest",
+    "@types/express": "^5.0.4",
+    "@types/express-fileupload": "^1.5.1",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^24.9.1",
+    "@types/passport": "^1.0.17",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
+    "dotenv": "^17.2.3",
+    "install": "^0.13.0",
+    "npm": "^11.6.2",
+    "prettier": "^3.6.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.18.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-fileupload": "^1.5.2",
+    "express-session": "^1.18.2",
+    "fastest-validator": "^1.19.1",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.1",
+    "mysql2": "^3.22.5",
+    "mysql2-migrations": "^3.4.1",
+    "nodemon": "^3.1.10",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0"
+  }
 }

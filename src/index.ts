@@ -5,8 +5,10 @@ import NotFoundException from "@/exception/NotFoundException";
 import routes from "@/routes/";
 import passport from "passport";
 import errorHandler from "@/middleware/errorHandler";
+import fileUpload from 'express-fileupload';
 import { testConnection } from "@/database/connection";
 import "@/config/passport";
+import path from "path";
 
 const app = express();
 
@@ -23,11 +25,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logger("dev"));
 app.use(passport.initialize());
+app.use(fileUpload({
+	useTempFiles: true,
+	tempFileDir: "/temp",
+}));
+
+app.use(express.static(path.join(process.cwd(), "/public")));
 
 app.use(routes);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-	throw new NotFoundException();
+	throw new NotFoundException(100);
 });
 
 app.use(errorHandler());

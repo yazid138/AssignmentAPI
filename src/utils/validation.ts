@@ -11,9 +11,10 @@ export default <T>(schema: ValidationSchema<T>, data: T) => {
   const result = check(data || {});
   if (result !== true) {
     throw new BadRequestException(
-      "Validation Error",
+      102,
+      "Parameter tidak sesuai format",
       result as ValidationError[],
     );
   }
-  return true;
+  return data;
 };

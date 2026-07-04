@@ -6,7 +6,7 @@ import UserResponse from "@/types/userResponse";
 export default (req: Request, res: Response, next: NextFunction) =>
   passport.authenticate("jwt", (err: boolean, user?: UserResponse) => {
     try {
-      if (err || !user) throw new UnauthorizedException();
+      if (err || !user) throw new UnauthorizedException(108, "Token tidak tidak valid atau kadaluwarsa");
       req.user = user;
       next();
     } catch (err) {

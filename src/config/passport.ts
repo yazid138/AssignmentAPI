@@ -9,17 +9,17 @@ import connection from "@/database/connection";
 
 passport.use(
   new LocalStrategy(
-    { usernameField: "username", passwordField: "password" },
+    { usernameField: "email", passwordField: "password" },
     async (
-      username: string,
+      email: string,
       password: string,
       done: (error: boolean, user?: User, info?: { message: string }) => void,
     ) => {
       try {
-        const [rows] = await connection.query<User[]>("SELECT * FROM users WHERE username = ?", [username]);
+        const [rows] = await connection.query<User[]>("SELECT * FROM users WHERE email = ?", [email]);
         const user = rows[0];
         if (!user) {
-          return done(true, undefined, { message: "Username tidak ditemukan" });
+          return done(true, undefined, { message: "Email tidak ditemukan" });
         }
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
@@ -44,7 +44,7 @@ passport.use(
     },
     async (
       payload: { id: number },
-      done: (err: boolean, user?: UserResponse) => void,
+      done: (err: boolean, user?: User) => void,
     ) => {
       try {
         const [rows] = await connection.query<User[]>("SELECT * FROM users WHERE id = ?", [payload.id]);
