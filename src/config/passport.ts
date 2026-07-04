@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import config from "@/config";
 import bcrypt from "bcrypt";
 import UserResponse from "@/types/userResponse";
+import User from "@/types/user";
 import connection from "@/database/connection";
 
 passport.use(
@@ -12,10 +13,10 @@ passport.use(
     async (
       username: string,
       password: string,
-      done: (error: boolean, user?: any, info?: { message: string }) => void,
+      done: (error: boolean, user?: User, info?: { message: string }) => void,
     ) => {
       try {
-        const [rows]: any = await connection.query("SELECT * FROM users WHERE username = ?", [username]);
+        const [rows] = await connection.query<User[]>("SELECT * FROM users WHERE username = ?", [username]);
         const user = rows[0];
         if (!user) {
           return done(true, undefined, { message: "Username tidak ditemukan" });
@@ -46,7 +47,7 @@ passport.use(
       done: (err: boolean, user?: UserResponse) => void,
     ) => {
       try {
-        const [rows]: any = await connection.query("SELECT * FROM users WHERE id = ?", [payload.id]);
+        const [rows] = await connection.query<User[]>("SELECT * FROM users WHERE id = ?", [payload.id]);
         const user = rows[0];
         if (!user) {
           return done(true);

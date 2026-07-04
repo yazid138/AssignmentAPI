@@ -10,6 +10,8 @@ import bcrypt from "bcrypt";
 import connection from "@/database/connection";
 import RegisterBody from "@/types/auth/registerBody";
 import LoginBody from "@/types/auth/loginBody";
+import User from "@/types/user";
+
 
 export const login = (req: Request, res: Response, next: NextFunction) => {
   validate<LoginBody>(
@@ -21,7 +23,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
   );
   passport.authenticate(
     "local",
-    (err: boolean, user?: any, info?: { message: string }) => {
+    (err: boolean, user?: User, info?: { message: string }) => {
       try {
         if (!user) {
           throw new UnauthorizedException(info?.message);
@@ -63,7 +65,10 @@ export const register = async (req: Request, res: Response) => {
     req.body,
   );
   const { name, username, password } = req.body as RegisterBody;
-  const [rows]: any = await connection.query("SELECT * FROM users WHERE username = ?", [username]);
+  const [rows] = await connection.query<User[]>(
+    "SELECT * FROM users WHERE username = ?",
+    [username],
+  );
   const existingUser = rows[0];
   if (existingUser) {
     throw new BadRequestException("Username already exists");
