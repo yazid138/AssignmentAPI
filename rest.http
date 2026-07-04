@@ -81,5 +81,5 @@ Content-Type: application/json
 
 
 ### Get History Transaction
-GET http://localhost:5000/transaction/history
+GET http://localhost:5000/transaction/history?offset=0&limit=2
 Authorization: Bearer {{authToken}}
