@@ -1,0 +1,57 @@
+// Database Markup Language (DBML) Schema definition for AssignmentAPI
+
+Table users {
+  id int [pk, increment]
+  first_name varchar(255) [not null]
+  last_name varchar(255) [not null]
+  email varchar(255) [unique, not null]
+  password varchar(255) [not null]
+  profile_image varchar(255) [null]
+  createdAt timestamp [default: `now()`]
+}
+
+Table banners {
+  id int [pk, increment]
+  banner_name varchar(255) [not null]
+  banner_image varchar(255) [not null]
+  description varchar(255) [not null]
+  created_at timestamp [default: `now()`]
+}
+
+Table services {
+  id int [pk, increment]
+  service_code varchar(255) [unique, not null]
+  service_name varchar(255) [not null]
+  service_icon varchar(255) [not null]
+  service_tariff decimal(10,0) [not null]
+  description varchar(255) [not null]
+  created_at timestamp [default: `now()`]
+}
+
+enum transaction_type_enum {
+  PAYMENT
+  TOPUP
+}
+
+Table transaction {
+  id int [pk, increment]
+  user_id int [not null]
+  invoice_number varchar(255) [unique, not null]
+  service_code varchar(255) [null]
+  total_amount decimal(10,0) [not null]
+  transaction_type transaction_type_enum [not null]
+  description varchar(255) [not null]
+  created_at timestamp [default: `now()`]
+}
+
+Table balance {
+  id int [pk, increment]
+  user_id int [not null]
+  balance int [not null]
+  created_at timestamp [default: `now()`]
+}
+
+// Relationships
+Ref: transaction.user_id > users.id [delete: cascade]
+Ref: balance.user_id > users.id [delete: cascade]
+Ref: transaction.service_code > services.service_code [update: cascade, delete: set null]
